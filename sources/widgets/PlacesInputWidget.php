@@ -24,7 +24,7 @@ class PlacesInputWidget extends \yii\widgets\InputWidget
         $this->configureAssetBundle();
 
         return $this->render(
-            'MapInputWidget',
+            'PlacesInputWidget',
             [
                 'id'        => $this->getId(),
                 'model'     => $this->model,
