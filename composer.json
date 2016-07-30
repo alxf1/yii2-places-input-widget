@@ -1,0 +1,28 @@
+{
+  "name": "devypt/yii2-places-input-widget",
+  "description": "Yii2 text search input for google places",
+  "keywords": [
+    "yii2",
+    "extension",
+    "widget",
+    "input",
+    "geocoding",
+    "geo-coordinates",
+    "coordinates"
+  ],
+  "homepage": "https://github.com/devypt/yii2-places-input-widget",
+  "type": "yii2-extension",
+  "license": "GNU GPL v3.0",
+  "authors": [
+    {
+      "name": "Ahmed Moahmed",
+      "email": "devypt@gmail.com",
+      "homepage": "http://github.com/devypt/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "devypt\\yii2\\": "sources"
+    }
+  }
+}
