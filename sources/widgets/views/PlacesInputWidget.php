@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 // Register asset bundle
-\devypt\yii2\assets\TextInputAsset::register($this);
+\devypt\yii2\assets\PlacesInputAsset::register($this);
 
 // [BEGIN] - Map input widget container
 echo Html::beginTag(

@@ -20,7 +20,7 @@ class PlacesInputAsset extends \yii\web\AssetBundle
         ];
 
     /**
-     * TextInputAsset constructor.
+     * PlacesInputAsset constructor.
      *
      * @param array $config
      */
