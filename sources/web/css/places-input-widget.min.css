@@ -1,1 +1,11 @@
-div.kolyunya-map-input-widget-canvas{width:100%;height:100%}input.kolyunya-map-input-widget-search-bar{width:42%;left:10px!important;top:10px!important;padding:5px}
+div.devypt-places-input-widget-canvas {
+    width: 100%;
+    height: 100%
+}
+
+input.devypt-places-input-widget-search-bar {
+    width: 42%;
+    left: 10px !important;
+    top: 10px !important;
+    padding: 5px
+}

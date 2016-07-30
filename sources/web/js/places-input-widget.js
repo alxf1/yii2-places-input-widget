@@ -1,16 +1,13 @@
-function MapInputWidgetManager()
-{
+function MapInputWidgetManager() {
 
-    const widgetSelector = '.kolyunya-map-input-widget';
+    const widgetSelector = '.devypt-places-input-widget';
 
     var self = this;
 
     var widgets = Array();
 
-    var initializeWidget = function ( widgetContainer )
-    {
-        if ( ! $(widgetContainer).data('initialized') )
-        {
+    var initializeWidget = function (widgetContainer) {
+        if (!$(widgetContainer).data('initialized')) {
             var widget = new MapInputWidget(widgetContainer);
             widget.initialize();
             return widget;
@@ -18,21 +15,17 @@ function MapInputWidgetManager()
         return null;
     };
 
-    var addWidget = function ( widget )
-    {
+    var addWidget = function (widget) {
         var widgetId = widget.getId();
         widgets[widgetId] = widget;
     };
 
-    this.initializeWidgets = function()
-    {
+    this.initializeWidgets = function () {
         $(widgetSelector).each
         (
-            function ( widgetIndex , widgetContainer )
-            {
+            function (widgetIndex, widgetContainer) {
                 var widget = initializeWidget(widgetContainer);
-                if ( widget )
-                {
+                if (widget) {
                     addWidget(widget);
                 }
             }
@@ -40,22 +33,20 @@ function MapInputWidgetManager()
 
     };
 
-    this.getWidget = function ( widgetId )
-    {
+    this.getWidget = function (widgetId) {
         var widget = widgets[widgetId];
         return widget;
     };
 
 }
 
-function MapInputWidget ( widget )
-{
+function MapInputWidget(widget) {
 
-    const inputSelector = 'input.kolyunya-map-input-widget-input';
+    const inputSelector = 'input.devypt-places-input-widget-input';
 
-    const searchBarSelector = 'input.kolyunya-map-input-widget-search-bar';
+    const searchBarSelector = 'input.devypt-places-input-widget-search-bar';
 
-    const canvasSelector = 'div.kolyunya-map-input-widget-canvas';
+    const canvasSelector = 'div.devypt-places-input-widget-canvas';
 
     var self = this;
 
@@ -67,15 +58,13 @@ function MapInputWidget ( widget )
 
     var map;
 
-    var initializeComponents = function()
-    {
+    var initializeComponents = function () {
         input = $(widget).find(inputSelector).get(0);
         searchBar = $(widget).find(searchBarSelector).get(0);
         canvas = $(widget).find(canvasSelector).get(0);
     };
 
-    var initializeMap = function()
-    {
+    var initializeMap = function () {
 
         map = new google.maps.Map
         (
@@ -84,23 +73,18 @@ function MapInputWidget ( widget )
                 mapTypeId: $(widget).data('map-type'),
                 center: getInitialMapCenter(),
                 zoom: $(widget).data('zoom'),
-                styles:
-                [
+                styles: [
                     {
                         featureType: "poi",
-                        stylers:
-                        [
+                        stylers: [
                             {
                                 visibility: "off",
                             },
                         ],
                     },
                 ],
-                mapTypeControlOptions :
-                {
-                    mapTypeIds:
-                    [
-                    ],
+                mapTypeControlOptions: {
+                    mapTypeIds: [],
                 },
             }
         );
@@ -109,8 +93,7 @@ function MapInputWidget ( widget )
         (
             map,
             'click',
-            function ( click )
-            {
+            function (click) {
                 self.setPosition
                 (
                     {
@@ -123,28 +106,25 @@ function MapInputWidget ( widget )
 
     };
 
-    var initializeWidget = function()
-    {
+    var initializeWidget = function () {
         var point = getInitialValue();
         self.setPosition(point);
-        $(widget).data('initialized',true);
+        $(widget).data('initialized', true);
     };
 
-    var initializeSearchBar = function()
-    {
+    var initializeSearchBar = function () {
         var searchBarIsEnabled = $(widget).data('enable-search-bar');
         var searchBarIsHidden = !searchBarIsEnabled;
-        $(searchBar).prop('hidden',searchBarIsHidden);
+        $(searchBar).prop('hidden', searchBarIsHidden);
         searchBarAutocomplete = new google.maps.places.Autocomplete(searchBar);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchBar);
         google.maps.event.addListener(
             searchBarAutocomplete,
             'place_changed',
-            function() {
+            function () {
                 var place = this.getPlace();
                 var placeGeometry = place.geometry;
-                if ( placeGeometry )
-                {
+                if (placeGeometry) {
                     var placeLocation = placeGeometry.location;
                     self.setPosition(placeLocation);
                 }
@@ -152,28 +132,24 @@ function MapInputWidget ( widget )
         );
     }
 
-    var makePointString = function ( pointData )
-    {
+    var makePointString = function (pointData) {
         var pattern = getPattern();
         var point = makePoint(pointData);
-        pattern = pattern.replace(/%latitude%/g,point.lat());
-        pattern = pattern.replace(/%longitude%/g,point.lng());
+        pattern = pattern.replace(/%latitude%/g, point.lat());
+        pattern = pattern.replace(/%longitude%/g, point.lng());
         return pattern;
     };
 
-    var hasInitialValue = function()
-    {
+    var hasInitialValue = function () {
         var hasInitialValue = $(input).prop('value') != '';
         return hasInitialValue;
     };
 
-    var getInitialValue = function()
-    {
+    var getInitialValue = function () {
         var point;
         var pattern = getPattern();
         var pointString = $(input).prop('value');
-        if ( pointString !== '' )
-        {
+        if (pointString !== '') {
             //  The function has an issue - it will not parse the initial value correctly
             //  if the pattern has more than one occurence of "%latitude%" or "%longitude%"
             //  in a row in the begining of the string.
@@ -186,68 +162,58 @@ function MapInputWidget ( widget )
             var longitudeIndex = latitudeFirst ? 1 : 0;
             var latitude = pointString.match(/-?\d+(\.\d+)?/g)[latitudeIndex];
             var longitude = pointString.match(/-?\d+(\.\d+)?/g)[longitudeIndex];
-            point = new google.maps.LatLng(latitude,longitude);
+            point = new google.maps.LatLng(latitude, longitude);
         }
-        else
-        {
+        else {
             point = null;
         }
         return point;
     };
 
-    var getInitialCenter = function()
-    {
+    var getInitialCenter = function () {
         var latitude = $(widget).data('latitude');
         var longitude = $(widget).data('longitude');
-        var point = new google.maps.LatLng(latitude,longitude);
+        var point = new google.maps.LatLng(latitude, longitude);
         return point;
     };
 
-    var getInitialMapCenter = function()
-    {
+    var getInitialMapCenter = function () {
         var initialMapCenter;
-        if ( hasInitialValue() )
-        {
+        if (hasInitialValue()) {
             initialMapCenter = getInitialValue();
         }
-        else
-        {
+        else {
             initialMapCenter = getInitialCenter();
         }
         return initialMapCenter;
     };
 
-    var getPattern = function()
-    {
+    var getPattern = function () {
         var pattern = $(widget).data('pattern');
         return pattern;
     };
 
     // Constructs a point from latitude and langitude
-    var makePoint = function ( pointData )
-    {
+    var makePoint = function (pointData) {
         var point;
         if
         (
             pointData.latitude !== undefined
-                &&
+            &&
             pointData.longitude !== undefined
-        )
-        {
+        ) {
             var latitude = pointData.latitude;
             var longitude = pointData.longitude;
-            point = new google.maps.LatLng(latitude,longitude);
+            point = new google.maps.LatLng(latitude, longitude);
         }
-        else
-        {
+        else {
             point = pointData;
         }
         return point;
     }
 
     // Initializes widget
-    this.initialize = function()
-    {
+    this.initialize = function () {
         initializeComponents();
         initializeMap();
         initializeWidget();
@@ -255,8 +221,7 @@ function MapInputWidget ( widget )
     };
 
     // Returns widget identifier
-    this.getId = function()
-    {
+    this.getId = function () {
         var id = $(widget).prop('id');
         return id;
     };
@@ -264,36 +229,30 @@ function MapInputWidget ( widget )
     // Sets the widget value to specified point;
     // Pans the map to the corresponding point;
     // Sets marker position to the corresponding point.
-    this.setPosition = function ( pointData )
-    {
+    this.setPosition = function (pointData) {
 
-        if ( map.marker )
-        {
+        if (map.marker) {
             map.marker.setMap(null);
         }
 
-        if ( pointData === null )
-        {
+        if (pointData === null) {
             // Disable the input in order not to send it in POST array
-            $(input).prop('disabled',true);
+            $(input).prop('disabled', true);
             return;
         }
-        else
-        {
+        else {
             // Enable the input in order to send in in POST array
-            $(input).prop('disabled',false);
+            $(input).prop('disabled', false);
         }
 
         var point = makePoint(pointData);
 
-        if ( $(widget).data('align-map-center') === 1 )
-        {
+        if ($(widget).data('align-map-center') === 1) {
             map.panTo(point);
         }
 
         var markerAnimation = null;
-        if ( $(widget).data('animate-marker') === 1 )
-        {
+        if ($(widget).data('animate-marker') === 1) {
             markerAnimation = google.maps.Animation.DROP;
         }
         map.marker = new google.maps.Marker
@@ -310,28 +269,25 @@ function MapInputWidget ( widget )
         (
             map.marker,
             'dragend',
-            function()
-            {
+            function () {
                 self.setPosition(this.getPosition());
             }
         );
 
         var pattern = $(widget).data('pattern');
         var pointString = makePointString(point);
-        $(input).prop('value',pointString);
+        $(input).prop('value', pointString);
 
     };
 
     // Pans the map the the specified point
-    this.panTo = function ( pointData )
-    {
+    this.panTo = function (pointData) {
         var point = makePoint(pointData);
         map.panTo(point);
     };
 
     // Sets the map zoom to a specified value
-    this.setZoom = function ( zoom )
-    {
+    this.setZoom = function (zoom) {
         map.setZoom(zoom);
     };
 
@@ -344,8 +300,7 @@ var mapInputWidgetManager;
 
 $(window).load
 (
-    function()
-    {
+    function () {
 
         // Create an instance of widget manager
         mapInputWidgetManager = new MapInputWidgetManager();

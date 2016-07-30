@@ -1,6 +1,6 @@
 {
   "name": "devypt/yii2-places-input-widget",
-  "description": "Yii2 text search input for google places",
+  "description": "Yii2 google places text search input",
   "keywords": [
     "yii2",
     "extension",
